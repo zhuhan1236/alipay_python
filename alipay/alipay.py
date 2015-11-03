@@ -172,10 +172,14 @@ def notify_verify(post):
     if settings.ALIPAY_TRANSPORT == 'https':
         params['service'] = 'notify_verify'
         gateway = 'https://mapi.alipay.com/gateway.do'
+        verify_url = gateway + '?service=notify_verify&partner=' + \
+                     params['partner'] + '&notify_id=' + params['notify_id']
     else:
         gateway = 'http://notify.alipay.com/trade/notify_query.do'
-    veryfy_result = urlopen(gateway, urlencode(params)).read()
-    if veryfy_result.lower().strip() == 'true':
+        verify_url = gateway + '?partner=' + params['partner'] + \
+                     '&notify_id=' + params['notify_id']
+    verify_result = urlopen(verify_url).read()
+    if verify_result.lower().strip() == 'true':
         return True
     return False
 
